@@ -39,10 +39,10 @@ class StaticPreferenceProvider(name: String?=null, contextProvider: contextProvi
 interface PreferenceDelegate<T : PreferenceProvider,R> : ReadWriteProperty<T,R?>
 
 
-class StringPreferenceDelegae<T : PreferenceProvider>(private val propertyName : String?=null) : PreferenceDelegate<T,String?>{
+class StringPreferenceDelegae<T : PreferenceProvider>(private val propertyName : String?=null, val default : String="") : PreferenceDelegate<T,String?>{
     override fun getValue(thisRef: T, property: KProperty<*>): String? {
         val name = propertyName ?: property.name
-         return thisRef.preference?.getString(name,"") ?: ""
+         return thisRef.preference?.getString(name,default) ?: default
     }
 
     override fun setValue(thisRef: T, property: KProperty<*>, value: String?) {

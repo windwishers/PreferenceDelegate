@@ -39,15 +39,17 @@ class MainActivity : AppCompatActivity() {
             ButtonItem("프리퍼런스 생성 "){
                 prefe.text = "123"
                 prefe.assignName = "123"
+                prefe.defaultValue = "값있음"
             }
             ,ButtonItem("프리퍼런스 보기 "){
                 val msg : String = " " +
-                        "${prefe.text} / ${prefe.assignName} "
+                        "${prefe.text} / ${prefe.assignName}  / ${prefe.defaultValue}"
                 Toast.makeText(this@MainActivity," $msg ",Toast.LENGTH_SHORT).show()
             }
             ,ButtonItem("프리퍼런스 삭제 "){
                 prefe.text = null
                 prefe.assignName = null
+                prefe.defaultValue = null
             }
         )
 
@@ -58,7 +60,8 @@ class MainActivity : AppCompatActivity() {
 class TestPrefer(contextProvider: contextProvider) : PreferenceProvider(contextProvider = contextProvider) {
 
     var text : String? by StringPreferenceDelegae<TestPrefer>()
-    var assignName  : String? by StringPreferenceDelegae<TestPrefer>("이름 지정")
+    var assignName  : String? by StringPreferenceDelegae<TestPrefer>(propertyName = "이름 지정")
+    var defaultValue : String? by StringPreferenceDelegae<TestPrefer>(default = "기본값지정")
 
 
 
