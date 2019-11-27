@@ -59,9 +59,9 @@ class MainActivity : AppCompatActivity() {
 
 class TestPrefer(contextProvider: contextProvider) : PreferenceProvider(contextProvider = contextProvider) {
 
-    var text : String? by StringPreferenceDelegae<TestPrefer>()
-    var assignName  : String? by StringPreferenceDelegae<TestPrefer>(propertyName = "이름 지정")
-    var defaultValue : String? by StringPreferenceDelegae<TestPrefer>(default = "기본값지정")
+    var text : String? by StringPreferenceDelegate<TestPrefer>()
+    var assignName  : String? by StringPreferenceDelegate<TestPrefer>(propertyName = "이름 지정")
+    var defaultValue : String? by StringPreferenceDelegate<TestPrefer>(default = "기본값지정")
 
 
 
