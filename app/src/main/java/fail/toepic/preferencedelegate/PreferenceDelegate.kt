@@ -39,7 +39,9 @@ class StaticPreferenceProvider(name: String?=null, contextProvider: contextProvi
 interface PreferenceDelegate<T : PreferenceProvider,R> : ReadWriteProperty<T,R?>
 
 
-class StringPreferenceDelegate<T : PreferenceProvider>(private val propertyName : String?=null, val default : String="") : PreferenceDelegate<T,String?>{
+class StringPreferenceDelegate<T : PreferenceProvider>(
+    private val propertyName : String?=null,
+    private val default : String="") : PreferenceDelegate<T,String?>{
     override fun getValue(thisRef: T, property: KProperty<*>): String? {
         val name = propertyName ?: property.name
          return thisRef.preference?.getString(name,default) ?: default
@@ -51,5 +53,34 @@ class StringPreferenceDelegate<T : PreferenceProvider>(private val propertyName 
             putString(name,value)
         }
     }
+}
 
+class StringPreferenceDelegateImp<T : PreferenceProvider>(propertyName : String?=null, default : String="") : PreferenceDelegateImp<T,String>(propertyName,default){
+    override fun PreferenceDelegateImp<T, String>.getValueImp(preferences: SharedPreferences?, name: String): String {
+        return preferences?.getString(name,default) ?: default
+    }
+
+    override fun SharedPreferences.Editor.setValueImp(name: String, value: String?) {
+        putString(name,value)
+    }
+
+}
+
+abstract class PreferenceDelegateImp<T : PreferenceProvider,R>(private val propertyName : String?=null, val default : R) : PreferenceDelegate<T,R?> {
+    override fun getValue(thisRef: T, property: KProperty<*>): R? {
+        val name = propertyName ?: property.name
+
+        return getValueImp(thisRef.preference, name) ?: default
+    }
+
+    abstract fun PreferenceDelegateImp<T, R>.getValueImp(preferences: SharedPreferences?, name: String): R
+
+    override fun setValue(thisRef: T, property: KProperty<*>, value: R?) {
+        val name = propertyName ?: property.name
+        thisRef.preference?.edit {
+            setValueImp(name, value)
+        }
+    }
+
+    abstract fun SharedPreferences.Editor.setValueImp(name: String, value: R?)
 }
